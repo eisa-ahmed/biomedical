@@ -1,1 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_biomedical_template,mrp.biomedical.template,model_mrp_biomedical_template,,1,1,1,1
+access_mrp_biomedical_bom,mrp.biomedical.bom,model_mrp_biomedical_bom,,1,1,1,1
+access_mrp_biomedical_bom_component,mrp.biomedical.bom.component,model_mrp_biomedical_bom_component,,1,1,1,1
+access_mrp_biomedical_bom_operation,mrp.biomedical.bom.operation,model_mrp_biomedical_bom_operation,,1,1,1,1

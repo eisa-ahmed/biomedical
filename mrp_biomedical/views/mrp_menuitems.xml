@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_mrp_biomedical_root" name="Mrp Biomedical" sequence="40">
+
+            <menuitem id="menu_mrp_biomedical_product_root" name="Products" sequence="10">
+
+                <menuitem id="menu_mrp_biomedical_product" name="Products"
+                          action="mrp_biomedical.mrp_biomedical_product_variant_action" sequence="5"/>
+
+            </menuitem>
+
+
+            <menuitem id="menu_mrp_biomedical_operation" name="Operations" sequence="15">
+
+                <menuitem id="menu_mrp_biomedical_bom" name="Bill of Materials" sequence="5" action="mrp_biomedical.action_mrp_biomedical_bom"/>
+
+                <menuitem id="menu_mrp_biomedical_template" name="Templates"
+                          action="mrp_biomedical.action_mrp_biomedical_template" sequence="10"/>
+
+            </menuitem>
+        </menuitem>
+
+    </data>
+</odoo>

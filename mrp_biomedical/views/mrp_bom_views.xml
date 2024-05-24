@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Form view for mrp.biomedical.bom -->
+        <record id="view_mrp_biomedical_bom_form" model="ir.ui.view">
+            <field name="name">mrp.biomedical.bom.form</field>
+            <field name="model">mrp.biomedical.bom</field>
+            <field name="arch" type="xml">
+                <form string="Biomedical Bill of Materials">
+                    <field name="active" invisible="1"/>
+                    <field name="product_uom_category_id" invisible="1"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_id" context="{'default_detailed_type': 'product'}"
+                                       options="{'no_open':True,'no_create':True}"/>
+                                <label for="product_qty" string="Quantity"/>
+                                <div class="o_row">
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" options="{'no_open':True,'no_create':True}"
+                                           groups="uom.group_uom"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="reference"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="component" string="Components">
+                                <field name="component_ids"
+                                       context="{'tree_view_ref': 'mrp_biomedical.view_mrp_biomedical_bom_component_tree'}"/>
+                            </page>
+                            <page name="operation" string="Operations">
+                                <field name="operation_ids"
+                                       context="{'tree_view_ref': 'mrp_biomedical.view_mrp_biomedical_bom_operation_tree', 'form_view_ref': 'mrp_biomedical.view_mrp_biomedical_bom_operation_form'}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree view for mrp.biomedical.bom -->
+        <record id="view_mrp_biomedical_bom_tree" model="ir.ui.view">
+            <field name="name">mrp.biomedical.bom.tree</field>
+            <field name="model">mrp.biomedical.bom</field>
+            <field name="arch" type="xml">
+                <tree string="Biomedical Bill of Materials" sample="1">
+                    <field name="product_id"/>
+                    <field name="reference"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search view for mrp.biomedical.bom -->
+        <record id="view_mrp_biomedical_bom_search" model="ir.ui.view">
+            <field name="name">mrp.biomedical.bom.search</field>
+            <field name="model">mrp.biomedical.bom</field>
+            <field name="arch" type="xml">
+                <search string="Search Biomedical BOMs">
+                    <field name="product_id"/>
+                    <field name="reference"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Tree view for Biomedical BoM Components -->
+        <record id="view_mrp_biomedical_bom_component_tree" model="ir.ui.view">
+            <field name="name">mrp.biomedical.bom.component.tree</field>
+            <field name="model">mrp.biomedical.bom.component</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="bom_id" invisible="1"/>
+                    <field name="bom_product_id" invisible="1"/>
+                    <field name="product_uom_category_id" invisible="1"/>
+                    <field name="product_id" string="Product"
+                           domain="[('detailed_type', '=', 'product'), ('id', '!=', bom_product_id)]"/>
+                    <field name="product_qty" string="Quantity"/>
+                    <field name="product_uom_id" string="Unit of Measure"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Tree view for Biomedical BoM Operations -->
+        <record id="view_mrp_biomedical_bom_operation_tree" model="ir.ui.view">
+            <field name="name">mrp.biomedical.bom.operation.tree</field>
+            <field name="model">mrp.biomedical.bom.operation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="template_id"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="signature_required" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view for Biomedical BoM Operations -->
+        <record id="view_mrp_biomedical_bom_operation_form" model="ir.ui.view">
+            <field name="name">mrp.biomedical.bom.operation.form</field>
+            <field name="model">mrp.biomedical.bom.operation</field>
+            <field name="arch" type="xml">
+                <form string="Operations">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="template_id" options="{'no_create': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="duration" widget="float_time"/>
+                                <field name="signature_required" attrs="{'invisible': [('template_id', '=', False)]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mrp_biomedical_bom" model="ir.actions.act_window">
+            <field name="name">Bill of Materials</field>
+            <field name="res_model">mrp.biomedical.bom</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

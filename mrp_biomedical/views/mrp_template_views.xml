@@ -1,6 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="view_mrp_biomedical_template_form" model="ir.ui.view">
+            <field name="name">mrp.biomedical.template.form</field>
+            <field name="model">mrp.biomedical.template</field>
+            <field name="arch" type="xml">
+                <form string="MRP Biomedical Template">
+                    <header>
+                        <button name="action_draft" string="Set to Draft" states="confirm" type="object"/>
+                        <button name="action_confirm" string="Confirm" states="draft" type="object"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                    </header>
+                    <field name="active" invisible="1"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="w-100" required="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </h1>
+                            <group>
+                                <field name="description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </div>
+                        <notebook>
+                            <page name="content" string="Content">
+                                <field name="html_content" class="oe-bordered-editor"
+                                       options="{'style-inline': true, 'codeview': true, 'dynamic_placeholder': true}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </page>
+                            <page name="configuration" string="Configuration">
+                                <group>
+                                    <group>
+                                        <field name="signature_required"
+                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_mrp_biomedical_template_tree" model="ir.ui.view">
+            <field name="name">mrp.biomedical.template.tree</field>
+            <field name="model">mrp.biomedical.template</field>
+            <field name="arch" type="xml">
+                <tree string="MRP Biomedical Templates">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="state" widget="badge" decoration-success="state == 'confirm'"
+                           decoration-muted="state == 'draft'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_mrp_biomedical_template_search" model="ir.ui.view">
+            <field name="name">mrp.biomedical.template.search</field>
+            <field name="model">mrp.biomedical.template</field>
+            <field name="arch" type="xml">
+                <search string="Search Biomedical Templates">
+                    <field name="name" string="Name"/>
+                    <field name="active" string="Active"/>
+                    <field name="description" string="Description"/>
+                    <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="filter_confirmed" domain="[('state', '=', 'confirm')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_mrp_biomedical_template" model="ir.actions.act_window">
+            <field name="name">Templates</field>
+            <field name="res_model">mrp.biomedical.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_filter_confirmed': 1}</field>
+        </record>
+
+        <!-- Action to View Products -->
+
+        <record id="mrp_biomedical_product_variant_action" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
 
     </data>
 </odoo>
