@@ -12,7 +12,7 @@ The MrpBioMedical module enhances Odoo's Manufacturing Resource Planning (MRP) s
     'website': "https://www.fiverr.com/eisaahmed63",
     'category': 'Manufacturing',
     'version': '17.0.1.0',
-    'depends': ['mail', 'product'],
+    'depends': ['mail', 'product', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'views/mrp_template_views.xml',

@@ -13,7 +13,8 @@ class MrpBiomedicalBom(models.Model):
         return self.env['uom.uom'].search([], limit=1, order='id').id
 
     active = fields.Boolean('Active', default=True)
-    reference = fields.Char(string='Reference', tracking=True, reequired=True)
+    company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company)
+    reference = fields.Char(string='Reference', tracking=True, required=True)
     product_id = fields.Many2one('product.product', string='Product', required=True, tracking=True, domain=[('detailed_type', '=', 'product')])
     product_qty = fields.Float(
         'Quantity', default=1.0,
@@ -78,10 +79,12 @@ class MrpBiomedicalBomComponent(models.Model):
 class MrpBiomedicalBomOperation(models.Model):
     _name = 'mrp.biomedical.bom.operation'
     _description = 'Mrp Biomedical, BoM Operations'
+    _check_company_auto = True
 
     bom_id = fields.Many2one('mrp.biomedical.bom', ondelete='cascade')
+    company_id = fields.Many2one('res.company', required=True, related='bom_id.company_id')
     name = fields.Char(string='Name', required=True)
-    template_id = fields.Many2one('mrp.biomedical.template', string='Template', required=True)
+    template_id = fields.Many2one('mrp.biomedical.template', string='Template', required=True, domain=[('state', '=', 'confirm')], check_company=True)
     duration = fields.Float(string='Duration', required=True)
     signature_required = fields.Boolean(string='Signature Required?', related='template_id.signature_required', readonly=False, store=True)
     sequence = fields.Integer(string='Sequence')
