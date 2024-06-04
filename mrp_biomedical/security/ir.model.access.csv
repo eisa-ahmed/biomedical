@@ -3,3 +3,4 @@ access_mrp_biomedical_template,mrp.biomedical.template,model_mrp_biomedical_temp
 access_mrp_biomedical_bom,mrp.biomedical.bom,model_mrp_biomedical_bom,,1,1,1,1
 access_mrp_biomedical_bom_component,mrp.biomedical.bom.component,model_mrp_biomedical_bom_component,,1,1,1,1
 access_mrp_biomedical_bom_operation,mrp.biomedical.bom.operation,model_mrp_biomedical_bom_operation,,1,1,1,1
+access_mrp_biomedical_production,mrp.biomedical.production,model_mrp_biomedical_production,,1,1,1,1

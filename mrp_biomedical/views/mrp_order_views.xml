@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Form view for mrp.biomedical.production -->
+        <record id="view_mrp_biomedical_production_form" model="ir.ui.view">
+            <field name="name">mrp.biomedical.production.form</field>
+            <field name="model">mrp.biomedical.production</field>
+            <field name="arch" type="xml">
+                <form string="Biomedical Production Orders">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <field name="date_finished" invisible="1"/>
+                        <div class="oe_title">
+                            <label class="o_form_label" for="name" string="MO Reference"/>
+                            <h1 class="d-flex">
+                                <field name="priority" widget="priority" class="me-3"/>
+                                <field name="name" placeholder="Manufacturing Reference" nolabel="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="id" invisible="1"/>
+                                <field name="product_id" context="{'default_detailed_type': 'product'}"
+                                       readonly="state != 'draft'" default_focus="1" placeholder="Product to build..."/>
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <label for="product_qty" string="Quantity"/>
+                                <div class="o_row g-0 d-flex">
+                                    <field name="product_qty" class="oe_inline text-start"
+                                           invisible="state not in ('draft', 'done')" readonly="state != 'draft'"/>
+                                    <label for="product_uom_id" string="" class="oe_inline"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
+                                    <field name="product_uom_id" groups="!uom.group_uom" invisible="1"/>
+                                    <field name="product_uom_id" options="{'no_open': True, 'no_create': True}"
+                                           groups="uom.group_uom" readonly="state != 'draft'"/>
+                                </div>
+                                <field name="bom_id" context="{'default_product_tmpl_id': product_tmpl_id}" readonly="0"/>
+                            </group>
+                            <group name="group_extra_info">
+                                <label for="date_start" string="Scheduled Date"
+                                       invisible="state in ['progress', 'to_close', 'done', 'cancel']"/>
+                                <label for="date_start" string="Start Date"
+                                       invisible="state not in ['progress', 'to_close', 'done', 'cancel']"/>
+                                <div class="o_row">
+                                    <field name="date_start" readonly="state in ['done', 'to_close', 'cancel']"
+                                           decoration-warning="state not in ('done', 'cancel') and date_start &lt; now"
+                                           decoration-danger="state not in ('done', 'cancel') and date_start &lt; current_date"
+                                           decoration-bf="state not in ('done', 'cancel') and (date_start &lt; current_date or date_start &lt; now)"/>
+                                </div>
+                                <field name="date_finished"/>
+                                <field name="user_id" widget="many2one_avatar" readonly="state in ['cancel', 'done']"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_mrp_biomedical_production_tree" model="ir.ui.view">
+            <field name="name">mrp.biomedical.production.tree</field>
+            <field name="model">mrp.biomedical.production</field>
+            <field name="arch" type="xml">
+                <tree string="Biomedical Production Orders" sample="1">
+                    <field name="name" decoration-bf="1"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                    <field name="date_start"/>
+                    <field name="date_finished"/>
+                    <field name="state" widget="badge"
+                           decoration-info="state == 'draft'"
+                           decoration-success="state == 'done'"
+                           decoration-primary="state == 'confirmed'"
+                           decoration-warning="state == 'progress'"
+                           decoration-danger="state == 'to_close'"
+                           decoration-muted="state == 'cancel'"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_mrp_biomedical_production_search" model="ir.ui.view">
+            <field name="name">mrp.biomedical.production.search</field>
+            <field name="model">mrp.biomedical.production</field>
+            <field name="arch" type="xml">
+                <search string="Search Biomedical Production Orders">
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="state"/>
+                    <field name="company_id"/>
+                    <filter string="Draft" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="state_confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Done" name="state_done" domain="[('state', '=', 'done')]"/>
+                    <group string="Group By">
+                        <filter string="Product" name="group_by_product" context="{'group_by': 'product_id'}"/>
+                        <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Company" name="group_by_company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_mrp_biomedical_production" model="ir.actions.act_window">
+            <field name="name">Production Orders</field>
+            <field name="res_model">mrp.biomedical.production</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>
