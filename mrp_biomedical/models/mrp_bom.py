@@ -71,7 +71,6 @@ class MrpBiomedicalBomComponent(models.Model):
     company_id = fields.Many2one('res.company', required=True, related='bom_id.company_id')
     bom_product_id = fields.Many2one('product.product', related='bom_id.product_id')
     product_id = fields.Many2one('product.product', string='Product', required=True, tracking=True)
-    product_ids = fields.Many2one('product.product', string='Product Domain', compute='_compute_product_ids')
     product_qty = fields.Float(
         'Quantity', default=1.0,
         digits='Product Unit of Measure', required=True)
@@ -94,8 +93,8 @@ class MrpBiomedicalBomOperation(models.Model):
     template_id = fields.Many2one('mrp.biomedical.template', string='Template', required=True, domain=[('state', '=', 'confirm')], check_company=True)
     department_ids = fields.Many2many('hr.department', string='Departments', required=True, check_company=True)
     operation_ids = fields.Many2many('mrp.biomedical.bom.operation', relation='mrp_operation_dependency_rel', column1='operation_id', column2='dependency_id', string='Operation Dependencies', check_company=True, help="""Select this BoM operations on which this operation depends. The operations selected will be checked in order i.e. if the selected operations are completed, only then this operation will be able to be processed.""")
-    duration = fields.Float(string='Duration', required=True)
     signature_required = fields.Boolean(string='Signature Required?', related='template_id.signature_required', readonly=False, store=True)
+    duration = fields.Float(string='Duration', required=True)
     sequence = fields.Integer(string='Sequence')
 
     @api.onchange('sequence')
